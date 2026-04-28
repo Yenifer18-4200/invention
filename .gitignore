@@ -214,3 +214,4 @@ If Git has already noticed the `__pycache__` folder (it shows up in green or wit
 ```bash
 git rm -r --cached __pycache__/
 ```
+desktop.ini
