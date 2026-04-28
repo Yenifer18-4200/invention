@@ -6,7 +6,7 @@ These describe the specific actions the software must perform.
 
 * **FR1:** The system shall allow Customers to register and log in.
 * **FR2:** The system shall display a list of products with descriptions and prices.
-* **FR3:** The system shall allow Admins to change an order status from "Pending" to "Shipped."
+* **FR3:** The system shall allow Admins to change an order status from "Pending" to "Completed."
 
 ## Non-functional Requirements
 These describe the attributes or constraints of the system (performance, security, usability).

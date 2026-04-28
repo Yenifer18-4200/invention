@@ -1,11 +1,11 @@
 import sqlite3
 
-def crear_tablas():
-    # Creamos la conexión y el archivo de la base de datos
-    conexion = sqlite3.connect("tienda_virtual.db")
-    cursor = conexion.cursor()
+def create_tables():
+    # Create the connection and the database file
+    connection = sqlite3.connect("tienda_virtual.db")
+    cursor = connection.cursor()
 
-    # Tabla User
+    # Create User Table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS User (
         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -16,7 +16,7 @@ def crear_tablas():
     )
     ''')
 
-    # Tabla Product
+    # Create Product Table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Product (
         product_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +26,7 @@ def crear_tablas():
     )
     ''')
 
-    # Tabla Order
+    # Create Order Table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS "Order" (
         order_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,7 +37,7 @@ def crear_tablas():
     )
     ''')
 
-    # Tabla Order_items
+    # Create Order Items Table 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Order_items (
         order_item_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,9 +49,9 @@ def crear_tablas():
     )
     ''')
 
-    conexion.commit()
-    print("¡Base de datos y tablas creadas con éxito siguiendo el ERD!")
-    conexion.close()
+    connection.commit()
+    print("¡Database and tables successfully created following the ERD!")
+    connection.close()
 
 if __name__ == "__main__":
-    crear_tablas()
+    create_tables()
