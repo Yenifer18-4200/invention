@@ -206,12 +206,18 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-#*.db
+# ==================================================
+# Custom Project Exclusions for Virtual Store
+# ==================================================
 
-### 2. If the folder is already "tracked" (Green color)
-If Git has already noticed the `__pycache__` folder (it shows up in green or with a "U" next to it), simply adding it to `.gitignore` might not be enough to remove it from the "Staging" area. Run this command in your VS Code terminal to "untrack" it:
+# Ignore the local SQLite database file to protect test data
+tienda_virtual.db
+*.db
+*.db-journal
 
-```bash
-git rm -r --cached __pycache__/
-```
+# Ignore Windows system files
 desktop.ini
+Thumbs.db
+
+# Ignore macOS system files
+.DS_Store

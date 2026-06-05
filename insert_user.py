@@ -1,34 +1,49 @@
 import sqlite3
 
 def register_user():
-    #1. Conexión: conectamos a la base de datos
     connection = sqlite3.connect("tienda_virtual.db")
-
-    #2. Cursor: The messenger that executes SQL commands
     cursor = connection.cursor()
 
-    print("**** User Registration ****")
-    full_name = input("Enter your full name: ")
-    email = input("Enter your email: ")
-    password = input("Enter your password: ")
-    role = input("Enter your role (customer/admin): ")
+    print("///////// User Registration /////////")
 
-    try:
-        # 3. Execution: Using the exact table and column names from the ERD
-        cursor.execute('''INSERT INTO user (name, email, password, role) 
-        VALUES (?, ?, ?, ?)''', (full_name, email, password, role))
+    # We use a loop here so the user stays in the registration
+    # screen until they provide valid input. 
+    
+    while True:
+        # .strip() removes accidental spaces at the beginning or end
+        full_name = input("Enter your full name: ").strip()
+        email = input("Enter your email: ").strip()
+        password = input("Enter your password: ").strip()
+        role = input("Enter your role (customer/admin): ").strip().lower()
 
-        # 4. Commit: Save the changes to the database
-        connection.commit()
-        print(f"\nSucessfully registered user: {full_name} with email: {email} and role: {role}")
+        # --- VALIDATION LINE ---
+        if not full_name or not email or not password:
+            print("\n[!] Registration Failed: Name, Email, and Password cannot be empty.")
+            continue
+        # -----------------------
 
-    except sqlite3.IntegrityError:
-        # This error occurs if the email is not unique (violating the unique constraint)
-        print("\nError: The email you entered is already registered. Please use a different email.")
+        # Security logic: verify if the role is valid
+        if role not in["customer", "admin"]:
+            print(f"[SYSTEM] '{role}' is not a valid role. Defaulting to 'customer'.")
+            role = "customer"
 
-    finally: 
-        # 5. Close: Always close the connection to free up resources
-        connection.close()
+        try:
+            cursor.execute('''
+                INSERT INTO User (name, email, password, role) 
+                VALUES (?, ?, ?, ?)
+            ''', (full_name, email, password, role))
+
+            connection.commit()
+            print(f"\nSuccessfully registered user: {full_name}")
+            break
+
+        except sqlite3.IntegrityError:
+            print("\n[!] Error: This email is already registered.")
+        except Exception as e:
+            print("\n[!] Error:", e)
+            break
+
+    connection.close()
 
 if __name__ == "__main__":
-     register_user()    
+    register_user()

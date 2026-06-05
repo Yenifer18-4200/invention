@@ -60,7 +60,7 @@ def generate_invoice(order_id):
             # Using the same aligment for the data 
             print(f"{name:<20} {qty:>5} {price:>10.2f} {subtotal:>12.2f}")
 
-        # The invoice invoice footer
+        # The invoice footer
         print("-"*line_width)
         total_label = "TOTAL AMOUNT:"
         # Aligning the total amount to the left and the value to the right

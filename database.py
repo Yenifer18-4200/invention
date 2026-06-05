@@ -33,10 +33,11 @@ def create_tables():
         user_id INTEGER NOT NULL,
         total_amount DECIMAL(10,2) NOT NULL,
         status VARCHAR(20) NOT NULL,
+        date TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES User (user_id)
     )
     ''')
-
+    
     # Create Order Items Table 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Order_items (
