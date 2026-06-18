@@ -1,37 +1,46 @@
 # Software Requirements Specification (SRS)
+**Project:** Virtual Store: Customer Order Management System  
+**Architecture:** Decoupled RESTful API (FastAPI / SQLite3)  
+**Target Portfolio:** SENA Software Analysis and Development (ADSO)
+
+---
 
 ## 1. Introduction
-This document defines the formal Functional and Non-Functional requirements for the **Virtual Store: Customer Order Management System**. It serves as the baseline for system evaluation, database validation, and architectural compliance for the SENA Software Analysis and Development portfolio.
+This document defines the formal Functional and Non-Functional requirements for the enterprise-grade Virtual Store Backend. It serves as the baseline for system evaluation, automated Pydantic schema validation, and architectural compliance for project defenses.
 
+---
 
 ## 2. System Scope
-The application manages a localized backend environment capable of orchestrating user profiles, itemized product inventories, multi-product order transactions, and structured invoice generation using a lightweight, relational SQLite database architecture.
+The application manages a modular backend ecosystem capable of orchestrating user profiles, relational product inventories, and multi-table order transactions. It exposes secure, cross-origin endpoints mapped to a localized SQLite relational database, enabling frictionless future frontend consumption.
 
+---
 
 ## 3. Functional Requirements (FR)
-Functional requirements define the specific behaviors, calculations, data processing, and management tasks that the system must execute.
+Functional requirements define the explicit behaviors, endpoints, calculations, and data mutation tasks that the backend ecosystem executes.
 
-| Requirement ID | System Module | Description |
-| :--- | :--- | :--- |
-| **FR1** | User Management | The system shall allow the registration of new users, capturing distinct properties including Name, Email, Password, and System Role (`customer`, `admin`). |
-| **FR2** | Inventory Ingestion | The system shall allow the registration of new products, establishing unique records containing Product Name, Unit Price, and Initial Stock Level. |
-| **FR3** | Data Presentation | The system shall query and display comprehensive tabular catalogs of all registered users and available inventory metrics directly in the console interface. |
-| **FR4** | Order Initialization | The system shall allow the creation of unique parent order headers, tracking the transaction date and establishing a Foreign Key link to the ordering User ID. |
-| **FR5** | Transactional Line Items | The system shall allow multiple products to be linked to an active order via a junction table (`Order_items`), automatically validating stock availability before processing deductions. |
-| **FR6** | State Management | The system shall allow an active order's lifecycle status to be dynamically updated between defined states: `Pending`, `Completed`, or `Cancelled`. |
-| **FR7** | Business Reporting | The system shall cross-reference data across four distinct relational tables using optimized SQL `JOIN` statements to compile and display detailed, auto-calculated business invoices. |
+| Requirement ID | System Module | Technical Description | Mapped Database Target |
+| :--- | :--- | :--- | :--- |
+| **FR1** | User Registry | The system shall maintain persistent profiles for users, tracking distinct relational properties including Name, Email, Password, and System Role (`customer`, `admin`). | `User` Table |
+| **FR2** | Inventory Ingestion | The system shall allow administrators to register new products via HTTP `POST` requests, establishing records containing Product Name, Unit Price, and Stock Level. | `Product` Table |
+| **FR3** | Data Presentation | The system shall query and serve comprehensive, decoupled JSON catalogs of all available inventory metrics via scalable `GET /products` endpoints. | `Product` Table |
+| **FR4** | Order Initialization | The system shall process unique order transaction headers, tracking timestamps via Python's `datetime` module and binding them structurally to a ordering `user_id`. | `Order` Table |
+| **FR5** | Relational Line Items | The system shall link active transactions to distinct products via a normalized junction table (`Order_items`), evaluating real-time stock deficits before processing deductions. | `Order_items` Table |
+| **FR6** | Administrative CRUD | The system shall expose secure administrative HTTP `PUT` and `DELETE` endpoints to dynamic-update catalog pricing, restock items, or purge products from active storage. | `Product` Table |
+| **FR7** | Business Intelligence | The system shall compile detailed, cross-referenced business invoices using optimized relational SQL `JOIN` statements across 4 target tables simultaneously via `GET /orders`. | Multi-Table Join |
+
+---
 
 ## 4. Non-Functional Requirements (NFR)
-Non-functional requirements specify system criteria, operational constraints, quality attributes, and performance boundaries.
 
-### 🔒 NFR1: Data Security & Privacy
-* The environment configuration shall isolate transactional database binaries (`*.db`) locally via project configuration rules (`.gitignore`), preventing data exposure on public remote repositories.
-* The system shall ensure data integrity across tables by enforcing strict Foreign Key cascading constraints.
+### 🔒 NFR1: Data Security, Isolation & Integrity
+* **Local Isolation:** The backend configuration shall completely isolate transactional database binaries (`*.db`) locally using project rules (`.gitignore`) to avoid exposing sensitive data on public repositories.
+* **Referential Constraints:** The schema script shall enforce relational integrity across tables using explicit `FOREIGN KEY` declarations, linking items securely to parents.
+* **Case Normalization:** To prevent data duplication, the product engine shall map input string names to lowercase variants before writing entries to disk.
 
-### 🎨 NFR2: Usability & Interface Design
-* The system shall deliver a loop-driven command-line interface (CLI) that remains operational until explicitly terminated by the user.
-* The system shall implement defensive input handling loops (`try/except`, `ValueError` trapping) to capture blank values or incorrect data types without crashing.
+### 🎨 NFR2: API Usability & Interface Contract
+* **Interactive Contract:** The system shall auto-generate an OpenAPI-compliant documentation interface (Swagger UI at `/docs`) for interactive route verification and test pipelines.
+* **Defensive Schema Parsing:** The application shall utilize robust Pydantic data models (`BaseModel`) to intercept malformed body structures, negative integers, or missing keys, returning standardized `422 Validation Error` payloads instead of throwing application exceptions.
 
-### ⚡ NFR3: Reliability & Performance
-* The backend database engine shall complete relational queries, schema updates, and dynamic invoice generation pipelines within a execution window of under 2 seconds.
-* The transaction modules shall utilize atomicity principles, ensuring partial failures invoke database rollbacks to prevent structural corruption.
+### ⚡ NFR3: Reliability, Performance & Atomicity
+* **Throughput Optimization:** The engine shall execute complex, multi-table structural queries, mutations, and database lookups within a responsive latency window of under 2 seconds.
+* **Transactional State Consistency:** The transactional components shall invoke atomic database routines (`conn.commit()`), ensuring any mid-flight operational failure triggers isolation safety to keep table relationships intact.

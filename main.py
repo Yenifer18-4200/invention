@@ -1,9 +1,9 @@
-from insert_product import register_product
+from scripts.insert_product import register_product
 import os
 from generate_invoice import generate_invoice
-from insert_order import create_order
-from insert_order_items import add_items_to_order
-from insert_user import register_user
+from scripts.insert_order import create_order
+from scripts.insert_order_items import add_items_to_order
+from scripts.insert_user import register_user
 from view_inventory import show_inventory
 import sqlite3
 
