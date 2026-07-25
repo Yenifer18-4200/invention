@@ -1,6 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import products, orders  # Connects your custom routing modules
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+from app.routers import products, orders  
 
 #1. Initialize the FastAPI application with metadata
 app = FastAPI(
@@ -8,6 +12,9 @@ app = FastAPI(
     description="Enterprise-grade architecture for managing inventory and customer orders",
     version="1.0.0",
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 #2. Adding the CORS middleware configuration to allow cross-origin requests from the frotend 
 app.add_middleware(
@@ -22,6 +29,23 @@ app.add_middleware(
 app.include_router(products.router)
 app.include_router(orders.router)
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to the enterprise-grade Virtual Store API!"}
+
+# ---------- HOME ----------
+
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"request": request}
+    )
+
+# ---------- DASHBOARD ----------
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="dashboard.html",
+        context={"request": request}
+    )
