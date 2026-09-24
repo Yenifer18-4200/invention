@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field  # type: ignore[import-not-found]
+
+
 
 class OrderCreate(BaseModel):
     user_id: int
